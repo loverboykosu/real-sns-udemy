@@ -1,7 +1,20 @@
 const router = require("express").Router();
+const { BiUserCircle } = require("react-icons/bi");
+const User = require("../models/User");
 
-router.get("/", (req, res) => {
-  res.send("user router");
+//ユーザ登録
+router.post("/register", async (req, res) => {
+  try {
+    const newUser = await new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    const user = await newUser.save();
+    return req.status(200).json(BiUserCircle);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 });
 
 module.exports = router;
