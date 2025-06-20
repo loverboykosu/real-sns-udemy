@@ -1,7 +1,18 @@
 const router = require("express").Router();
-
-router.get("/", (req, res) => {
-  res.send("auth router");
+const User = require("../models/User");
+//ユーザ登録
+router.post("/register", async (req, res) => {
+  try {
+    const newUser = await new User({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    const user = await newUser.save();
+    return req.status(200).json(BiUserCircle);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
 });
 
 module.exports = router;
