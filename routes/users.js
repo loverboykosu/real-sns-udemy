@@ -5,6 +5,14 @@ const router = require("express").Router();
 //CRUD操作
 //C : Create
 //R : Read
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json(user);
+  } catch (err) {
+    return res.status(500).json(err);
+  }
+});
 //U : Update
 router.put("/:id", async (req, res) => {
   if (req.body.userId === req.params.id || req.body.isAdmin) {
