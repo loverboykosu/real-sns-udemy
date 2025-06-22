@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
 });
 
 //特定の投稿にいいねをおす
-outer.put("/:id/like", async (req, res) => {
+router.put("/:id/like", async (req, res) => {
   //follow対象が自分のアカウントでないかどうか
   //body.userId : 自分のアカウント、params.id : follow対象のアカウント
   try {
