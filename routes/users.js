@@ -81,4 +81,38 @@ router.put("/:id/follow", async (req, res) => {
   }
 });
 
+//ユーザのフォロー解除
+router.put("/:id/unfollow", async (req, res) => {
+  //follow対象が自分のアカウントでないかどうか
+  //body.userId : 自分のアカウント、params.id : follow対象のアカウント
+  if (req.body.userId !== req.params.id) {
+    try {
+      //user : follow対象の情報
+      const user = await User.findById(req.params.id);
+      //currentUser : 自分自身のアカウンｔｐの情報
+      const currentUser = await User.findById(req.body.userId);
+      //followerに存在したら
+      if (user.followers.includes(req.body.userId)) {
+        await user.updateOne({
+          $pull: {
+            followers: req.body.userId,
+          },
+        });
+        await currentUser.updateOne({
+          $pull: {
+            followings: req.params.id,
+          },
+        });
+        return res.status(200).json("unfollow成功");
+      } else {
+        return res.status(403).json("未follow");
+      }
+    } catch (err) {
+      return res.status(500).json(err);
+    }
+  } else {
+    return res.status(500).json("自分自身をunfollowできません");
+  }
+});
+
 module.exports = router;
